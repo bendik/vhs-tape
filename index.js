@@ -81,10 +81,19 @@ function create (delay, fn) {
       },
       async type (str, event) {
         for (const c of str.split('')) {
-          const el = t.element.querySelector(':focus')
-          if (!el) return
+          const el = document.activeElement
+          const keyData = {
+            key: c,
+            code: c.charCodeAt(0).toString(),
+            charCode: c.charCodeAt(0),
+            keyCode: c.charCodeAt(0)
+          }
+          if (!el) throw new Error('typing with no focused element')
           await t.delay()
-          el.dispatchEvent(new window.KeyboardEvent(event || 'keydown', { key: c }))
+          el.dispatchEvent(new window.KeyboardEvent('keydown', keyData))
+          el.dispatchEvent(new window.KeyboardEvent('keypress', keyData))
+          el.value = el.value + c
+          el.dispatchEvent(new window.KeyboardEvent('keyup', keyData))
         }
         return t.delay()
       }

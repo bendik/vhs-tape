@@ -15,6 +15,9 @@ vhs('A simple mounting of some html async/await', async t => {
   await t.click(t.element.querySelector('button'))
   t.equal(exampleComponent.element.querySelector('.counter').innerText, 'Counter: 2')
 
+  // t.focus focuses an element
+  await t.focus('button')
+  t.assert(document.activeElement instanceof window.HTMLButtonElement)
   // you can also directly interact with elements but you may need to await t.raf()
   // to wait for updates
   t.element.querySelector('button').click()
